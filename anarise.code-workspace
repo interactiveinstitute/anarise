@@ -33,7 +33,7 @@
 		"recommendations": [
 			"dbaeumer.vscode-eslint",
 			"octref.vetur",
-			"antfu.i18n-ally"
+			"lokalise.i18n-ally"
 		],
 		"unwantedRecommendations": [
 			"hookyqr.beautify",
