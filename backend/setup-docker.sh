@@ -22,8 +22,29 @@ exe apt-get update
 say 'Remove any old docker stuff'
 exe apt-get remove docker docker-engine docker.io -y
 
-say 'Install DOCKER!!!'
-exe apt install docker.io -y
+say 'allow apt to use repo over hhtps'
+exe apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg-agent \
+    software-properties-common -y
+
+say 'add docker official key'
+exe curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+say 'setup stable repository'
+exe add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+say 'install DOCKER!!!'
+exe apt-get update
+exe apt-get install docker-ce docker-ce-cli containerd.io -y
+
+# say 'Install DOCKER!!!'
+# exe apt install docker.io -y
 
 say 'Make sure docker runs at startup'
 exe systemctl start docker
@@ -41,7 +62,7 @@ exe chmod +x /usr/local/bin/docker-compose
 say 'Creating a directory for mounting docker persistent volumes'
 exe mkdir ~/docker-persistence
 say 'Give ownership to container user (UID 1001) and docker group'
-exe chown 1001:docker ~/docker-persistence/
+exe chown ubuntu:docker ~/docker-persistence/
 say 'Give read & write access to groups attached to folder'
 exe chmod g+rw ~/docker-persistence
 
