@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import EssentialLink from 'components/EssentialLink.vue'
+import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
   {
@@ -92,7 +92,7 @@ const linksData = [
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
   }
-]
+];
 
 export default {
   name: 'MainLayout',
@@ -101,7 +101,7 @@ export default {
     return {
       leftDrawerOpen: false,
       essentialLinks: linksData
-    }
+    };
   }
-}
+};
 </script>
