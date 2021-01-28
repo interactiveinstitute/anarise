@@ -12,10 +12,8 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          AnaRISE
         </q-toolbar-title>
-
-        <div>Quasar v{{ $q.version }}</div>
       </q-toolbar>
     </q-header>
 
@@ -50,7 +48,7 @@
 import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
-  {
+  /* {
     title: 'Docs',
     caption: 'quasar.dev',
     icon: 'school',
@@ -91,7 +89,7 @@ const linksData = [
     caption: 'Community Quasar projects',
     icon: 'favorite',
     link: 'https://awesome.quasar.dev'
-  }
+  } */
 ];
 
 export default {
