@@ -1,17 +1,16 @@
 <template>
   <div>
-
-    <div id="container"></div>
-
+    <div id="container" />
   </div>
 </template>
 
 <script>
 
-import Highcharts from 'highcharts'
-require('highcharts/modules/networkgraph')(Highcharts)
+import Highcharts from 'highcharts';
+// require('highcharts/modules/networkgraph')(Highcharts);
 
-// import networkgraph from 'highcharts/modules/networkgraph'
+import networkgraph from 'highcharts/modules/networkgraph';
+networkgraph(Highcharts);
 
 export default {
   name: 'EssentialLink',
@@ -21,9 +20,12 @@ export default {
       required: true
     }
   },
+  mounted: function () {
+    this.initChart();
+  },
   methods: {
     initChart: function () {
-      const g = this.graph
+      const g = this.graph;
       Highcharts.chart('container', {
         chart: {
           type: 'networkgraph',
@@ -52,11 +54,8 @@ export default {
           id: 'lang-tree',
           data: g.edges.map(e => [e.source, e.target])
         }]
-      })
+      });
     }
-  },
-  mounted: function () {
-    this.initChart()
   }
-}
+};
 </script>

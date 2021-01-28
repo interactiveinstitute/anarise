@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import graphs from './modules/graphs'
+import graphs from './modules/graphs';
 
 Vue.use(Vuex);
 
