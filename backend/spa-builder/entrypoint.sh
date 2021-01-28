@@ -8,4 +8,4 @@ npm ci
 # npm install -g @quasar/cli
 npm run build
 
-cp -r /temp/dist/spa /spa_build
+cp -r /temp/dist /spa_build

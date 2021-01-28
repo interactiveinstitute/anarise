@@ -3,7 +3,7 @@ FROM node:12-alpine
 # Create app directory
 WORKDIR /temp
 
-VOLUME [ "/mounted_app", "spa_build" ]
+VOLUME [ "/mounted_app", "/spa_build" ]
 
 
 COPY ./entrypoint.sh /entrypoint.sh
