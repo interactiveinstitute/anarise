@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div class="text-center">
+    <h4>Your calculated network</h4>
     <div id="container" />
   </div>
 </template>
@@ -62,6 +63,10 @@ export default {
 
       return data;
 
+    },
+    matches: function () {
+      let connections = this.graph.edges.filter(e => e.source === this.graph['self-id'] || e.target === this.graph['self-id']);
+      return connections.map(e => e.source !== this.graph['self-id'] ? e.source : e.target);
     }
   },
   mounted: function () {
@@ -71,18 +76,19 @@ export default {
   methods: {
     initChart: function () {
       var self = this;
-      const g = this.graph;
+      //const g = this.graph;
       Highcharts.chart('container', {
         chart: {
           type: 'networkgraph',
-          height: '100%'
+          //height: '100%',
         },
-        title: {
+        /*title: {
           text: 'Edge graph for ' + g['self-id']
-        },
-        subtitle: {
-          // text: 'A Force-Directed Network Graph in Highcharts'
-        },
+        },*/
+        title: null,
+        //subtitle: {
+        // text: 'A Force-Directed Network Graph in Highcharts'
+        //},
         plotOptions: {
           networkgraph: {
             keys: self.keys,
@@ -119,37 +125,50 @@ export default {
             this instanceof Highcharts.seriesTypes.networkgraph &&
             e.options.id === 'chart-employee'
           ) {
+
+            //Init all links
             e.options.data.forEach(function (link) {
 
-              link.width = self.getWeight(link.from,link.to) < 0.4 ? 1 : 3;
-              link.color = self.getWeight(link.from,link.to) < 0.4 ? 'black' : 'black';
+              link.width = Math.floor(self.getWeight(link.from,link.to) * 10);
+              link.color = 'black';
               
-              //All nodes
-              self.keys.forEach((key) => {
-                nodes[link[key]] = {
-                  id: link[key],
-                  //color: self.isCoAuthor(link[key]) ? '#66ca66' : '#fa6666',
-                  color: self.getUnitColor(self.getUnit(link[key])),
-                  marker: {
-                    radius: self.isCoAuthor(link[key]) ? 10 : 5,
-                  }
-                    
-                };
+              //Init all target nodes
+              self.keys.forEach(key => {
+                if(!nodes[link[key]]){
+                  nodes[link[key]] = {
+                    id: link[key],
+                    color: self.getUnitColor(self.getUnit(link[key])),
+                    marker: {
+                      radius: 6
+                    }
+                  };
+                }
               });
 
               if(self.getUnit(link.from) === self.getUnit(link.to)){
                 link.color = self.getUnitColor(self.getUnit(link.from));
               }
 
-              //Self node
-              let s = nodes[g['self-id']];
-              if(s){
-                s.marker.radius = 15;
+            });
+
+            //Second round
+            e.options.data.forEach(function (link) {
+
+              if(link.from === g['self-id']){
+                nodes[link.to].marker.radius = 9;
+              }
+
+              if(link.to === g['self-id']){
+                nodes[link.from].marker.radius = 9;
               }
 
             });
 
-            
+            //Self node
+            let s = nodes[g['self-id']];
+            if(s){
+              s.marker.radius = 15;
+            }
 
             e.options.nodes = Object.keys(nodes).map(function (id) {
               return nodes[id];
@@ -189,3 +208,14 @@ export default {
   }
 };
 </script>
+
+
+<style lang="scss" scoped>
+
+#container {
+  height: 300px;
+}
+
+</style>
+
+
