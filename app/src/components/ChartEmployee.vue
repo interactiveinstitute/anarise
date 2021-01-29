@@ -98,7 +98,7 @@ export default {
             linkFormat: ''
           },
           link: {
-            color: 'black'
+            color: 'darkgray'
           },
           id: 'chart-employee',
           data: self.dataEmployees
@@ -122,6 +122,7 @@ export default {
             e.options.data.forEach(function (link) {
 
               link.width = self.getWeight(link.from,link.to) < 0.4 ? 1 : 3;
+              link.color = self.getWeight(link.from,link.to) < 0.4 ? 'black' : 'black';
               
               //All nodes
               self.keys.forEach((key) => {
@@ -130,16 +131,20 @@ export default {
                   //color: self.isCoAuthor(link[key]) ? '#66ca66' : '#fa6666',
                   color: self.getUnitColor(self.getUnit(link[key])),
                   marker: {
-                    radius: self.isCoAuthor(link[key]) ? 8 : 5,
+                    radius: self.isCoAuthor(link[key]) ? 10 : 5,
                   }
                     
                 };
               });
 
+              if(self.getUnit(link.from) === self.getUnit(link.to)){
+                link.color = self.getUnitColor(self.getUnit(link.from));
+              }
+
               //Self node
               let s = nodes[g['self-id']];
               if(s){
-                s.marker.radius = 10;
+                s.marker.radius = 15;
               }
 
             });
