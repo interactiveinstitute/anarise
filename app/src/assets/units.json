@@ -1,0 +1,32 @@
+{
+    "units": [
+        {
+            "name": "Datorsystem (102402)",
+            "color": "#cc6666"
+        },
+        {
+            "name": "Dataanalys (102403)",
+            "color": "#66cc66"
+        },
+        {
+            "name": "Datavetenskap (102400)",
+            "color": "#6666cc"
+        },
+        {
+            "name": "Uppkopplad intelligens (102401)",
+            "color": "#cccc66"
+        },
+        {
+            "name": "ICE Data center (102405)",
+            "color": "#cc66cc"
+        },
+        {
+            "name": "Digital säkerhet (102406)",
+            "color": "#66cccc"
+        },
+        {
+            "name": "Sensorsystem (102102)",
+            "color": "#888888"
+        }
+    ]
+}

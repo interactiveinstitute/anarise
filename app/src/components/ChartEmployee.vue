@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 
 import Highcharts from 'highcharts';
 // require('highcharts/modules/networkgraph')(Highcharts);
@@ -20,9 +21,49 @@ export default {
       required: true
     }
   },
-  data: function () {return {
-    keys: ['from', 'to']
-  };},
+  data: function () {
+    return {
+      keys: ['from', 'to']
+    };
+  },
+  computed: {
+    ...mapState(['units']),
+    dataEmployees: function () {
+      return this.graph.edges.map(e => function (){
+        return{
+          from: e.source, 
+          to: e.target,
+          type: 'employee'
+        };
+      }());
+    },
+    dataUnits: function () {
+      return this.graph.nodes.map(n => function (){
+        return{
+          from: n.unit, 
+          to: n.id,
+          type: 'unit' 
+        };
+      }());
+    },
+    dataEmployer: function () {
+
+      let data = this.graph.nodes.map(n => function (){
+        return{
+          from: 'RISE', 
+          to: n.unit,
+        };
+      }());
+      
+
+      data = data.filter(() => (value, index, self) => {
+        return self.indexOf(value) === index;
+      });
+
+      return data;
+
+    }
+  },
   mounted: function () {
     this.styleChart();
     this.initChart();
@@ -31,8 +72,6 @@ export default {
     initChart: function () {
       var self = this;
       const g = this.graph;
-      const dataMap = g.edges.map(e => function (){return{from: e.source, to:e.target};}());
-      console.log(dataMap);
       Highcharts.chart('container', {
         chart: {
           type: 'networkgraph',
@@ -62,7 +101,7 @@ export default {
             color: 'black'
           },
           id: 'chart-employee',
-          data: dataMap
+          data: self.dataEmployees
         }]
       });
     },
@@ -83,29 +122,25 @@ export default {
             e.options.data.forEach(function (link) {
 
               link.width = self.getWeight(link.from,link.to) < 0.4 ? 1 : 3;
-              console.log(link.width);
-              if (link.from === g['self-id']) {
-                nodes[g['self-id']] = {
-                  id: g['self-id'],
+              
+              //All nodes
+              self.keys.forEach((key) => {
+                nodes[link[key]] = {
+                  id: link[key],
+                  //color: self.isCoAuthor(link[key]) ? '#66ca66' : '#fa6666',
+                  color: self.getUnitColor(self.getUnit(link[key])),
                   marker: {
-                    radius: 10
+                    radius: self.isCoAuthor(link[key]) ? 8 : 5,
                   }
-                };
-              } else {
-
-                self.keys.forEach((key) => {
-                  nodes[link[key]] = {
-                    id: link[key],
-                    color: self.isCoAuthor(link[key]) ? '#66ca66' : '#fa6666',
-                    marker: {
-                      radius: self.isCoAuthor(link[key]) ? 8 : 5,
-                    }
                     
-                  };
-                });
+                };
+              });
 
+              //Self node
+              let s = nodes[g['self-id']];
+              if(s){
+                s.marker.radius = 10;
               }
-
 
             });
 
@@ -125,12 +160,26 @@ export default {
       }
       return false;
     },
+    getUnit: function (id) {
+      var node = this.graph.nodes.find(n => n.id === id);
+      if (node){
+        return node['unit'];
+      }
+      return undefined;
+    },
     getWeight: function (from,to) {
       var edge = this.graph.edges.find(e => e.source === from && e.target === to);
       if (edge){
         return edge['weight'];
       }
       return 0.0;
+    },
+    getUnitColor: function (name) {
+      var unit = this.units.find(u => u.name === name);
+      if (unit){
+        return unit.color;
+      }
+      return 'gray';
     }
   }
 };
