@@ -10,7 +10,7 @@
           RISE unit
         </td>
       </tr>
-      <tr v-for="node in matches" :key="node.id">
+      <tr v-for="node in matches" :key="node.id" :style="{'background-color': unitColor(node)}">
         <td>
           {{ node["id"] }}
         </td>
@@ -24,6 +24,8 @@
 
 <script>
 
+import { mapState } from 'vuex';
+
 export default {
   name: 'TablesEmployee',
   props: {
@@ -33,11 +35,18 @@ export default {
     }
   },
   computed: {
+    ...mapState(['units']),
     matches: function () {
       let sorted = this.graph.edges.slice(0).sort((n0,n1) => n1.weight-n0.weight);
       let connections = sorted.filter(e => e.source === this.graph['self-id'] || e.target === this.graph['self-id']);
       let ids = connections.map(e => e.source !== this.graph['self-id'] ? e.source : e.target);
       return ids.map(id => this.graph.nodes.find(n => n.id === id));
+    }
+  },
+  methods: {
+    unitColor: function (node){
+      let unit = this.units.find(u => u.name === node.unit);
+      return unit ? unit.color : 'white';
     }
   }
 };
@@ -50,15 +59,18 @@ export default {
     }
 
     tr:first-child{
+        font-weight: bold;
         background: lightgray;
     }
 
     td {
-        border: 1px solid gray;
+        border: 1px solid black;
         padding: 0.5em;
+        
     }
 
     td:first-child{
+        color: black;
         font-weight: bold;
     }
   
