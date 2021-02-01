@@ -3,6 +3,10 @@
     <h3>
       {{ graph["self-id"] }}
     </h3>
+    <q-btn label="testRouting" to="/" />
+    <q-btn label="log in" @click="signIn" />
+    <q-btn label="log out" @click="logOut" />
+    
 
     <div class="flex justify-around full-width">
       <ChartEmployee :graph="graph" class="col" />
@@ -32,6 +36,26 @@ export default {
     return {
       graph: graph
     };
+  },
+  created(){
+    // let authState = this.$msal.isAuthenticated();
+    // console.log(authState);
+  },
+  beforeRouteEnter(to, from, next){
+    console.log('gonna enter the index route');
+    next();
+  },
+  beforeRouteUpdate(){
+    // let authState = this.$msal.isAuthenticated();
+    // console.log(authState);
+  },
+  methods: {
+    signIn(){
+      this.$msal.signIn();
+    },
+    logOut(){
+      this.$msal.signOut();
+    }
   }
 };
 </script>

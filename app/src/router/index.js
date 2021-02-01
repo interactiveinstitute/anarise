@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import {msal} from 'boot/vue-msal';
 
 import routes from './routes';
 
@@ -24,6 +25,33 @@ export default function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     mode: process.env.VUE_ROUTER_MODE,
     base: process.env.VUE_ROUTER_BASE
+  });
+
+  const guestRoutes = [
+    '/unauthorized'
+  ];
+
+  Router.beforeEach((to, from, next)=>{
+    console.log('Navigating from:', from);
+    console.log('to:', to);
+    console.log('msal:', msal);
+    console.log('logged in:', msal.isAuthenticated());
+
+    if(guestRoutes.includes(to.path)){
+      //path is ok for guests
+      next();
+      return;
+    }
+
+    // eslint-disable-next-line no-constant-condition
+    if(msal && msal.isAuthenticated()){
+      next();
+      return;
+    }
+
+    next('/unauthorized');
+    return;
+
   });
 
   return Router;
