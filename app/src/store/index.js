@@ -5,6 +5,8 @@ import graphs from './modules/graphs';
 
 Vue.use(Vuex);
 
+import units from 'assets/units.json';
+
 /*
  * If not building with SSR mode, you can
  * directly export the Store instantiation;
@@ -22,7 +24,10 @@ export default function (/* { ssrContext } */) {
 
     // enable strict mode (adds overhead!)
     // for dev mode only
-    strict: process.env.DEBUGGING
+    strict: process.env.DEBUGGING,
+    state: {
+      units: units.units
+    }
   });
 
   return Store;
