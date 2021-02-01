@@ -6,7 +6,11 @@
 
 anarise.testyta.se {
   route {
-    root * /dist/spa
+
+    route /api* {
+      strip_prefix /api
+      reverse_proxy flask:5000
+    }
     try_files {path} /index.html #rewrite request to index if no file matches
     file_server {
       root /dist/spa
